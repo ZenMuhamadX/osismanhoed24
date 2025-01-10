@@ -1,5 +1,5 @@
 import { Quote } from 'lucide-react'
-import Card from '../components/Card' // Pastikan komponen Card 
+import { BackButton } from '../components/BackButton'
 
 // Data Array Member
 const members = [
@@ -49,7 +49,7 @@ const Members = () => {
 
       {/* Cards Container */}
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {members.map((member, index) => (
             <div 
               key={index}
@@ -85,16 +85,7 @@ const Members = () => {
           ))}
         </div>
       </div>
-
-      {/* Back Button */}
-      <div className="container mx-auto px-4 py-8 text-center">
-        <button 
-          onClick={() => window.location.href = '/'}
-          className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors"
-        >
-          Kembali ke Beranda
-        </button>
-      </div>
+      <BackButton/>
     </div>
   )
 }
