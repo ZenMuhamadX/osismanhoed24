@@ -58,26 +58,18 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    to='/info'
-                    className='block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-500'
-                  >
-                    Informasi
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to='/contact'
-                    className='block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-500'
-                  >
-                    Kontak
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to='/member'
+                    to='/members'
                     className='block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-500'
                   >
                     Anggota
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to='/suggestion'
+                    className='block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-500'
+                  >
+                    Kotak saran
                   </Link>
                 </li>
               </ul>
