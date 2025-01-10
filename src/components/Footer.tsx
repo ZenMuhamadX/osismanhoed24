@@ -1,4 +1,4 @@
-import { FaInstagram, FaWhatsapp, FaEnvelope, FaMap } from "react-icons/fa"; // Ikon sosial media
+import { FaInstagram, FaWhatsapp, FaEnvelope} from "react-icons/fa"; // Ikon sosial media
 
 const year = new Date().getFullYear();
 
@@ -45,7 +45,6 @@ const Footer = () => {
             rel="noopener noreferrer"
             className="flex space-x-2 hover:text-gray-400"
           >
-            <FaMap size={40} />
             <span className="font-normal text-sm text-gray-400">
               {" "}
               Jalan raya kawali-panjalu Margamulya Kawali, Margamulya, Ciamis,
