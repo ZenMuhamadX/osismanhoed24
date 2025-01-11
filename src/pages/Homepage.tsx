@@ -1,37 +1,22 @@
 import { ArrowRight, Calendar, Target, List } from 'lucide-react'
 import Footer from '../components/Footer'
+import { supabase } from '../lib/supabase'
+import { useEffect, useState } from 'react'
 
-const proker = [
-  {
-    proker: 'Menyelenggarakan PHB dan PHBN',
-  },
-  {
-    proker: 'Mengadakan kumpulan rutin',
-  },
-  {
-    proker: 'Membuat hikmah hari ini',
-  },
-  {
-    proker: 'Classmeeting',
-  },
-  {
-    proker: 'Mengadakan ceram seram dan Gema Ramadhan',
-  },
-  {
-    proker: 'budaya 5S ( Senyum sapa salam sopan santun )',
-  },
-  {
-    proker: 'Kotak aspirasi/saran',
-  },
-  {
-    proker: 'Senam pagi',
-  },
-  {
-    proker: 'Menghidupkan kembali mading',
-  },
-]
+interface Program {
+  id: number
+  title: string
+}
 
 const Homepage = () => {
+  const [programs, setPrograms] = useState<Program[]>([])
+  const fetchPrograms = async () => {
+    const { data } = await supabase.from('programs').select('*')
+    setPrograms(data || [])
+  }
+  useEffect(() => {
+    fetchPrograms()
+  }, [])
   return (
     <div className='min-h-screen bg-gray-50'>
       {/* Main Content - Using the same green gradient */}
@@ -113,12 +98,12 @@ const Homepage = () => {
               </h2>
             </div>
             <div className='grid md:grid-cols-3 gap-6'>
-              {proker.map((proker, i) => (
+              {programs.map((proker, i) => (
                 <div key={i} className='p-4 border rounded-lg bg-green-50'>
                   <h3 className='font-semibold mb-2 text-green-700'>
                     Program {i + 1}
                   </h3>
-                  <p className='text-gray-600 text-sm'>{proker.proker}</p>
+                  <p className='text-gray-600 text-sm'>{proker.title}</p>
                 </div>
               ))}
             </div>
