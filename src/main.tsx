@@ -10,33 +10,33 @@ import { Suggestion } from './pages/Suggestion'
 import LoginPage from './pages/Login'
 
 const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <MainLayout />,
-		children: [
-			{
-				path: '/',
-				element: <HomePage />,
-			},
-			{
-				path: 'members',
-				element: <Members />,
-			},
-			{
-				path: 'suggestion',
-				element: <Suggestion />,
-			},
-			{
-				path: 'login',
-				element: <LoginPage />,
-			},
-		],
-		errorElement: <PageNotFound />,
-	},
+  {
+    path: '/',
+    element: <MainLayout />,
+    children: [
+      {
+        path: '/',
+        element: <HomePage />,
+      },
+      {
+        path: 'members',
+        element: <Members />,
+      },
+      {
+        path: 'suggestion',
+        element: <Suggestion />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+    ],
+    errorElement: <PageNotFound />,
+  },
 ])
 
 createRoot(document.getElementById('root')!).render(
-	<StrictMode>
-		<RouterProvider router={router} />
-	</StrictMode>,
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>,
 )
