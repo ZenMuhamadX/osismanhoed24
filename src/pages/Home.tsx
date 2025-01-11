@@ -4,7 +4,7 @@ const Home = () => {
   const navigate = useNavigate()
 
   return (
-    <div className='relative min-h-screen bg-gradient-to-br from-green-400 to-green-600 text-white flex flex-col overflow-hidden'>
+    <div className='relative min-h-screen bg-gradient-to-br from-green-400 to-green-500 text-white flex flex-col overflow-hidden'>
       {/* Header */}
       <header className='pt-16 px-6 text-center'>
         <h1 className='text-4xl font-bold mb-4'>

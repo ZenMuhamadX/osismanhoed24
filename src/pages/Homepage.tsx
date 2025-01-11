@@ -34,7 +34,7 @@ const Homepage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Content - Using the same green gradient */}
-      <div className="bg-gradient-to-b from-green-700 to-green-400 py-12">
+      <div className="bg-gradient-to-b from-green-700 to-green-500 py-12">
         <div className="container mx-auto px-4">
           {/* Welcome Text */}
           <div className="text-white text-center mb-12">

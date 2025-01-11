@@ -40,7 +40,7 @@ const members = [
 
 const Members = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-700 to-green-400">
+    <div className="min-h-screen bg-gradient-to-b from-green-700 to-green-500">
       {/* Header */}
       <div className="py-12 text-white text-center">
         <h1 className="text-4xl font-bold mb-4">Struktur Organisasi</h1>
@@ -80,7 +80,7 @@ const Members = () => {
               </div>
 
               {/* Subtle decorative element */}
-              <div className="h-1 bg-gradient-to-r from-green-400 to-green-600" />
+              <div className="h-1 bg-gradient-to-r from-green-400 to-green-500" />
             </div>
           ))}
         </div>
