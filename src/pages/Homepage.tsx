@@ -1,4 +1,5 @@
 import { ArrowRight, Calendar, Target, List } from 'lucide-react'
+import Footer from '../components/Footer'
 
 const proker = [
   {
@@ -135,6 +136,7 @@ const Homepage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
