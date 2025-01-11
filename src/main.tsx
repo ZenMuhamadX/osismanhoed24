@@ -1,5 +1,5 @@
 import './index.css'
-import PageNotFound from './components/PageNotFound'
+import PageNotFound from './components/notFound/PageNotFound'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -8,6 +8,7 @@ import { MainLayout } from './MainLayout'
 import Members from './pages/Member'
 import { Suggestion } from './pages/Suggestion'
 import LoginPage from './pages/Login'
+import { Dashboard } from './pages/Dashboard'
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />,
+      },
+      {
+        path: 'dashboard',
+        element: <Dashboard />,
       },
     ],
     errorElement: <PageNotFound />,

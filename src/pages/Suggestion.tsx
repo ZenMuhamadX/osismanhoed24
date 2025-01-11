@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Send, CheckCircle } from 'lucide-react'
-import { BackButton } from '../components/BackButton'
+import { BackButton } from '../components/button/BackButton'
 import { supabase } from '../lib/supabase'
+import Footer from '../components/Footer'
 
 export const Suggestion = () => {
   const [formData, setFormData] = useState({
@@ -154,6 +155,7 @@ export const Suggestion = () => {
         </div>
       </div>
       <BackButton />
+      <Footer />
     </div>
   )
 }
