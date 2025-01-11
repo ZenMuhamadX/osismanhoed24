@@ -63,7 +63,7 @@ export const Suggestion = () => {
                 htmlFor='name'
                 className='block text-gray-700 font-medium mb-2'
               >
-                Nama Lengkap
+                Nama (boleh anonim)
               </label>
               <input
                 type='text'
@@ -73,7 +73,7 @@ export const Suggestion = () => {
                 onChange={handleChange}
                 required
                 className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all'
-                placeholder='Masukkan nama lengkap'
+                placeholder='Masukkan nama (boleh anonim)'
               />
             </div>
 
