@@ -3,13 +3,13 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 
 export const MainLayout = () => {
-  return (
-    <div>
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  )
+	return (
+		<div>
+			<Header />
+			<main>
+				<Outlet />
+			</main>
+			<Footer />
+		</div>
+	)
 }
