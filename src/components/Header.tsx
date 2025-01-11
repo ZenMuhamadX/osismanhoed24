@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { LoginButton } from './button/Log-in-outButton'
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -10,10 +11,7 @@ const Header = () => {
         <h1 className='text-lg font-bold text-white'>OSIS MA NURUL HUDA</h1>
         <div className='flex items-center space-x-4'>
           {/* Tombol Login */}
-          <button className='bg-white text-gray-600 text-sm font-medium py-2 px-4 rounded-full hover:bg-gray-100 focus:outline-none'>
-            Masuk
-          </button>
-
+          <LoginButton />
           {/* Menu Burger */}
           <div className='relative hover:cursor-pointer'>
             <button
