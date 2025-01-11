@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { BackButton } from '../components/button/BackButton'
 import { Mail, Lock } from 'lucide-react' // Import ikon dari Lucide
@@ -10,6 +10,22 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate() // Inisialisasi useNavigate untuk navigasi
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession()
+        if (error) throw error
+        if (data.session) {
+          navigate('/dashboard')
+        }
+      } catch (error) {
+        console.error('Error checking session:', error)
+        navigate('/dashboard')
+      }
+    }
+    checkSession()
+  }, [navigate])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
