@@ -7,6 +7,7 @@ import HomePage from './pages/Homepage'
 import { MainLayout } from './MainLayout'
 import Members from './pages/Member'
 import { Suggestion } from './pages/Suggestion'
+import LoginPage from './pages/Login'
 
 const router = createBrowserRouter([
   {
@@ -22,9 +23,13 @@ const router = createBrowserRouter([
         element: <Members />,
       },
       {
-        path:'suggestion',
-        element:<Suggestion/>
-      }
+        path: 'suggestion',
+        element: <Suggestion />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
     ],
     errorElement: <PageNotFound />,
   },
