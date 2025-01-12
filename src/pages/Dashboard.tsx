@@ -1,61 +1,111 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
-import { User } from '@supabase/supabase-js'
-import { MemberList } from '../components/admin/MemberList'
-import { ProgramList } from '../components/admin/ProgramList'
 import { Header } from '../components/admin/Header'
-import { SuggestionList } from '../components/admin/SuggestionList'
+import {
+  Users,
+  ClipboardList,
+  MessageSquare,
+  LayoutDashboard,
+  Loader2,
+} from 'lucide-react'
+import { checkSession } from '../lib/checkSession'
+import { Link, useLocation } from 'react-router-dom'
+
+// Menu item type
+interface MenuItem {
+  title: string
+  path: string
+  icon: React.ReactNode
+  description: string
+}
 
 export const Dashboard = () => {
-  const [user, setUser] = useState<User | null>(null)
-  const navigate = useNavigate()
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { data, error } = await supabase.auth.getSession()
-        if (error) throw error
-        if (data.session) {
-          setUser(data.session.user)
-        } else {
-          navigate('/login')
-        }
-      } catch (error) {
-        console.error('Error checking session:', error)
-        navigate('/login')
-      }
-    }
-    checkSession()
+  const { user } = checkSession()
+  const location = useLocation()
 
-    const { data: subscriptionData } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session) {
-          setUser(session.user)
-        } else {
-          navigate('/login')
-        }
-      },
+  // Define menu items
+  const menuItems: MenuItem[] = [
+    {
+      title: 'Overview',
+      path: '/dashboard',
+      icon: <LayoutDashboard className='w-6 h-6' />,
+      description: 'Tampilan ringkasan seluruh data',
+    },
+    {
+      title: 'Anggota',
+      path: '/dashboard/members',
+      icon: <Users className='w-6 h-6' />,
+      description: 'Kelola data anggota OSIS',
+    },
+    {
+      title: 'Program Kerja',
+      path: '/dashboard/programs',
+      icon: <ClipboardList className='w-6 h-6' />,
+      description: 'Kelola program kerja OSIS',
+    },
+    {
+      title: 'Kotak Saran',
+      path: '/dashboard/suggestions',
+      icon: <MessageSquare className='w-6 h-6' />,
+      description: 'Lihat saran dari siswa',
+    },
+  ]
+
+  if (!user) {
+    return (
+      <div className='min-h-screen flex items-center justify-center bg-gray-50'>
+        <div className='flex flex-col items-center gap-2 text-green-700'>
+          <Loader2 className='w-8 h-8 animate-spin' />
+          <p className='text-sm font-medium'>Loading...</p>
+        </div>
+      </div>
     )
+  }
 
-    return () => {
-      subscriptionData?.subscription?.unsubscribe()
-    }
-  }, [navigate])
+  const isExactPath = location.pathname === '/dashboard'
 
   return (
-    <div className=''>
-      {user ? (
-        <div>
-          <Header role={user.user_metadata.display_name} />
-          <main className='p-6'>
-            <MemberList />
-            <ProgramList />
-            <SuggestionList />
-          </main>
-        </div>
-      ) : (
-        <h1>loading...</h1>
-      )}
+    <div className='min-h-screen bg-gray-50'>
+      <Header role={user.user_metadata.display_name} />
+
+      <main className='container mx-auto px-4 py-8'>
+        {isExactPath ? (
+          // Dashboard Home/Overview
+          <div className='space-y-6'>
+            <h2 className='text-2xl font-bold text-gray-800'>
+              Selamat Datang {user.user_metadata.display_name}
+            </h2>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+              {menuItems.slice(1).map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className='block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow group'
+                >
+                  <div className='flex items-center gap-4'>
+                    <div className='p-3 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors'>
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className='text-lg font-semibold text-gray-800'>
+                        {item.title}
+                      </h3>
+                      <p className='text-sm text-gray-500'>
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <p className='text-center'>
+              fitur2 na gs waras dipake tapi acan beres 100% masih tahap
+              development keneh ke sesa fitur2 na nyusul (zuzan)
+            </p>
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </main>
     </div>
   )
 }

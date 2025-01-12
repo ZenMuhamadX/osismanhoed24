@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { ClipboardList, Plus, Trash2, Loader2 } from 'lucide-react'
+import { ClipboardList, Plus, Trash2, Loader2, Folder } from 'lucide-react'
+import { checkSession } from '../../lib/checkSession'
+import { BackToDashboardButton } from '../button/backToDashboard'
 
 interface Program {
   id: number
@@ -80,11 +82,27 @@ export const ProgramList: FC = () => {
     }
   }
 
+  const { user } = checkSession()
+
+  if (!user) {
+    return (
+      <div className='min-h-screen flex items-center justify-center bg-gray-50'>
+        <div className='flex flex-col items-center gap-2 text-green-700'>
+          <Loader2 className='w-8 h-8 animate-spin' />
+          <p className='text-sm font-medium'>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='p-4 sm:p-6 bg-white rounded-lg shadow-lg'>
       <div className='flex items-center gap-2 mb-6'>
         <ClipboardList className='w-6 h-6 text-green-700' />
         <h2 className='text-2xl font-bold text-green-700'>Program Kerja</h2>
+        <div className='ml-auto'>
+          <BackToDashboardButton />
+        </div>
       </div>
 
       {error && (
@@ -131,20 +149,31 @@ export const ProgramList: FC = () => {
           Belum ada program kerja yang ditambahkan
         </div>
       ) : (
-        <ul className='space-y-2'>
+        <ul className='space-y-3'>
           {programs.map((program) => (
             <li
               key={program.id}
-              className='flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow group'
+              className='flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow duration-200 group'
             >
-              <span className='text-gray-700'>{program.title}</span>
+              {/* Judul Program */}
+              <div className='flex items-center space-x-3'>
+                <div className='p-2 bg-gray-100 rounded-full'>
+                  <Folder className='w-5 h-5 text-gray-500' />{' '}
+                  {/* Ikon folder */}
+                </div>
+                <span className='text-gray-800 text-sm font-medium'>
+                  {program.title}
+                </span>
+              </div>
+
+              {/* Tombol Hapus */}
               <button
                 onClick={() => deleteProgram(program.id)}
                 disabled={isLoading}
-                className='flex items-center gap-1 px-3 py-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed'
+                className='flex items-center gap-2 px-3 py-1.5 text-red-500 hover:text-white hover:bg-red-500 rounded-lg border border-red-500 transition-all duration-150 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed'
               >
                 <Trash2 className='w-4 h-4' />
-                Hapus
+                <span className='text-sm'>Hapus</span>
               </button>
             </li>
           ))}

@@ -1,27 +1,33 @@
 import { FC, useEffect, useState } from 'react'
 import { UserCard } from './UserCard'
 import { supabase } from '../../lib/supabase'
-import { UserPlus, Trash2, Users } from 'lucide-react'
+import { UserPlus, Users, Loader2 } from 'lucide-react'
+import { checkSession } from '../../lib/checkSession'
+import { BackToDashboardButton } from '../button/backToDashboard'
 
-interface Member {
+export interface Member {
   id: number
   name: string
   role: string
   gender: 'male' | 'female'
+  motto: string
 }
 
 export const MemberList: FC = () => {
+  const [error, setError] = useState<string | null>(null)
   const [members, setMembers] = useState<Member[]>([])
   const [newMember, setNewMember] = useState({
     name: '',
     role: '',
     gender: 'male' as 'male' | 'female',
+    motto: '',
   })
   const [isLoading, setIsLoading] = useState(false)
 
   const fetchMembers = async () => {
     try {
       setIsLoading(true)
+      setError(null)
       const { data, error } = await supabase.from('members').select('*')
       if (error) throw error
       setMembers(data || [])
@@ -38,20 +44,27 @@ export const MemberList: FC = () => {
 
   const addMember = async () => {
     if (!newMember.name || !newMember.role) {
-      alert('Nama dan Role harus diisi!')
+      setError('Nama dan Role harus diisi!')
+      setTimeout(() => {
+        setError(null)
+      }, 3000)
       return
     }
 
     try {
       setIsLoading(true)
+      setError(null)
       const { error } = await supabase.from('members').insert([newMember])
       if (error) throw error
 
-      setNewMember({ name: '', role: '', gender: 'male' })
+      setNewMember({ name: '', role: '', gender: 'male', motto: '' })
       fetchMembers()
     } catch (error) {
       console.error('Error adding member:', error)
-      alert('Gagal menambahkan anggota.')
+      setError('Gagal menambahkan anggota.')
+      setTimeout(() => {
+        setError(null)
+      }, 3000)
     } finally {
       setIsLoading(false)
     }
@@ -60,15 +73,32 @@ export const MemberList: FC = () => {
   const deleteMember = async (id: number) => {
     try {
       setIsLoading(true)
+      setError(null)
       const { error } = await supabase.from('members').delete().eq('id', id)
       if (error) throw error
       fetchMembers()
     } catch (error) {
       console.error('Error deleting member:', error)
-      alert('Gagal menghapus anggota.')
+      setError('Gagal menghapus anggota.')
+      setTimeout(() => {
+        setError(null)
+      }, 3000)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const { user } = checkSession()
+
+  if (!user) {
+    return (
+      <div className='min-h-screen flex items-center justify-center bg-gray-50'>
+        <div className='flex flex-col items-center gap-2 text-green-700'>
+          <Loader2 className='w-8 h-8 animate-spin' />
+          <p className='text-sm font-medium'>Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -76,7 +106,16 @@ export const MemberList: FC = () => {
       <div className='flex items-center gap-2 mb-6'>
         <Users className='w-6 h-6 text-green-700' />
         <h2 className='text-2xl font-bold text-green-700'>Data Anggota BPH</h2>
+        <div className='ml-auto'>
+          <BackToDashboardButton />
+        </div>
       </div>
+
+      {error && (
+        <div className='mb-4 p-2 bg-red-50 border border-red-200 text-red-600 rounded-lg'>
+          {error}
+        </div>
+      )}
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6'>
         {members.map((member) => (
@@ -84,17 +123,11 @@ export const MemberList: FC = () => {
             key={member.id}
             className='relative p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow'
           >
-            <button
-              onClick={() => deleteMember(member.id)}
-              className='absolute top-2 right-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors'
-              disabled={isLoading}
-            >
-              <Trash2 className='w-5 h-5' />
-            </button>
             <UserCard
               name={member.name}
               role={member.role}
-              //   gender={member.gender}
+              gender={member.gender}
+              onDelete={() => deleteMember(member.id)}
             />
           </div>
         ))}
@@ -117,6 +150,15 @@ export const MemberList: FC = () => {
             value={newMember.role}
             onChange={(e) =>
               setNewMember({ ...newMember, role: e.target.value })
+            }
+            className='w-full px-4 py-2 rounded-lg border border-green-200 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-colors'
+          />
+          <input
+            type='text'
+            placeholder='Motto hidup'
+            value={newMember.motto}
+            onChange={(e) =>
+              setNewMember({ ...newMember, motto: e.target.value })
             }
             className='w-full px-4 py-2 rounded-lg border border-green-200 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-colors'
           />
