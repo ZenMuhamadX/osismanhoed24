@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { BackButton } from '../components/button/BackButton'
-import { Mail, Lock } from 'lucide-react' // Import ikon dari Lucide
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react' // Import ikon dari Lucide
 import { useNavigate } from 'react-router-dom'
 
 const LoginPage: React.FC = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -67,11 +68,17 @@ const LoginPage: React.FC = () => {
               <input
                 id='email'
                 type='email'
+                name='email' // Nama field, berguna jika Anda akan mengirim data ke backend
                 placeholder='Enter your email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className='w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm'
-                required
+                autoComplete='off' // Mencegah autofill
+                inputMode='email' // Memberikan keyboard email di perangkat mobile
+                aria-label='Email' // Aksesibilitas tambahan untuk pembaca layar
+                maxLength={254} // Batas panjang input (RFC 5321, batas email maksimal 254 karakter)
+                required // Menandakan bahwa input wajib diisi
+                spellCheck='false' // Menonaktifkan pemeriksaan ejaan pada input
               />
               <Mail
                 className='absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400'
@@ -82,41 +89,82 @@ const LoginPage: React.FC = () => {
 
           {/* Password Input */}
           <div className='relative'>
+            {/* Label */}
             <label
               htmlFor='password'
               className='block text-sm font-medium text-gray-700'
             >
               Password
             </label>
+
+            {/* Input Container */}
             <div className='relative mt-1'>
               <input
                 id='password'
-                type='password'
+                type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password'
+                name='password' // Nama field untuk pengiriman form
                 placeholder='Enter your password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className='w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm'
-                required
+                className='w-full pl-10 pr-10 py-2 rounded-md border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm transition-all duration-300 ease-in-out'
+                autoComplete='new-password' // Menghindari autofill default browser
+                spellCheck='false' // Menonaktifkan pemeriksaan ejaan
+                aria-label='Password' // Memberikan label untuk aksesibilitas
+                maxLength={128} // Batas panjang password
+                minLength={8} // Panjang minimal password
+                required // Input wajib diisi
               />
+
+              {/* Ikon Gembok */}
               <Lock
-                className='absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400'
+                className='absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 transition-transform duration-300 ease-in-out'
                 aria-hidden='true'
               />
+
+              {/* Tombol Show/Hide Password */}
+              <button
+                type='button'
+                onClick={() => setShowPassword((prev) => !prev)}
+                className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none transition-colors duration-300 ease-in-out'
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? (
+                  <EyeOff
+                    className='h-5 w-5 transition-transform duration-300 ease-in-out'
+                    aria-hidden='true'
+                  />
+                ) : (
+                  <Eye
+                    className='h-5 w-5 transition-transform duration-300 ease-in-out'
+                    aria-hidden='true'
+                  />
+                )}
+              </button>
             </div>
           </div>
-
           {/* Login Button */}
           <button
             type='submit'
-            className='w-full py-2 px-4 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm font-medium'
+            className={`w-full py-2 px-4 rounded-md shadow-md text-sm font-medium text-white transition-all duration-300 ease-in-out 
+    ${loading ? 'bg-green-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500'}`}
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? (
+              <div className='flex items-center justify-center gap-2'>
+                <div className='w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin'></div>
+                Logging in...
+              </div>
+            ) : (
+              'Login'
+            )}
           </button>
         </form>
         {/* Back Button */}
         <div>
           <BackButton />
+          <p className='text-center font-mono text-sm text-gray-500'>
+            Login untuk mengakses dashboard
+          </p>
         </div>
       </div>
     </div>
