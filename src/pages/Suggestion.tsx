@@ -24,7 +24,6 @@ export const Suggestion = () => {
   }
 
   const handleSubmit = async (e: any) => {
-    console.log(formData)
     e.preventDefault()
     setIsSubmitting(true)
     setError('')
