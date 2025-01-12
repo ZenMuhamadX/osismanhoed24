@@ -9,6 +9,9 @@ import Members from './pages/Member'
 import { Suggestion } from './pages/Suggestion'
 import LoginPage from './pages/Login'
 import { Dashboard } from './pages/Dashboard'
+import { MemberList } from './components/admin/MemberList'
+import { ProgramList } from './components/admin/ProgramList'
+import { SuggestionList } from './components/admin/SuggestionList'
 
 const router = createBrowserRouter([
   {
@@ -34,6 +37,18 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <Dashboard />,
+      },
+      {
+        path: '/dashboard/members',
+        element: <MemberList />,
+      },
+      {
+        path: '/dashboard/programs',
+        element: <ProgramList />,
+      },
+      {
+        path: '/dashboard/suggestions',
+        element: <SuggestionList />,
       },
     ],
     errorElement: <PageNotFound />,
