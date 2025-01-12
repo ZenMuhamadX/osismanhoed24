@@ -1,13 +1,16 @@
 import { Quote } from 'lucide-react'
 
 interface CardProps {
-  photo: string
+  gender: 'male' | 'female'
   name: string
-  position: string
+  role: string
   motto: string
 }
 
-const Card: React.FC<CardProps> = ({ photo, name, position, motto }) => {
+const Card: React.FC<CardProps> = ({ gender, name, role, motto }) => {
+  let photo = gender === 'male' ? 'male.png' : 'female.png'
+  if (name === 'HJ JOHAN JOHARIANSYAH SPD') photo = 'Pembina.jpg'
+
   return (
     <div className='bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300'>
       {/* Photo */}
@@ -16,7 +19,7 @@ const Card: React.FC<CardProps> = ({ photo, name, position, motto }) => {
         <div className='absolute inset-0 bg-gradient-to-t from-black opacity-30' />
         <div className='absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black via-transparent to-transparent'>
           <h3 className='font-bold text-lg text-white'>{name}</h3>
-          <p className='text-sm text-white opacity-80'>{position}</p>
+          <p className='text-sm text-white opacity-80'>{role}</p>
         </div>
       </div>
 
