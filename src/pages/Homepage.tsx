@@ -2,6 +2,7 @@ import { ArrowRight, Calendar, Target, List } from 'lucide-react'
 import Footer from '../components/Footer'
 import { supabase } from '../lib/supabase'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface Program {
   id: number
@@ -10,6 +11,7 @@ interface Program {
 
 const Homepage = () => {
   const [programs, setPrograms] = useState<Program[]>([])
+  const navigate = useNavigate()
   const fetchPrograms = async () => {
     const { data } = await supabase.from('programs').select('*')
     setPrograms(data || [])
@@ -113,7 +115,7 @@ const Homepage = () => {
           <div className='text-center'>
             <button
               className='bg-white text-green-600 px-6 py-3 rounded-lg font-semibold flex items-center gap-2 mx-auto hover:bg-green-50 transition-colors'
-              onClick={() => (window.location.href = '/members')}
+              onClick={() => navigate('/members')}
             >
               Lihat Struktur Organisasi
               <ArrowRight className='h-4 w-4' />
