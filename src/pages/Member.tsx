@@ -1,48 +1,26 @@
+import { useEffect, useState } from 'react'
 import { BackButton } from '../components/button/BackButton'
 import Card from '../components/Card'
 import Footer from '../components/Footer'
-
-// Data Array Member
-const members = [
-  {
-    photo: 'male.png',
-    name: 'Ahmad Ripani',
-    position: 'Ketua OSIS',
-    motto: 'Jika orang lain bisa,maka saya juga bisa',
-  },
-  {
-    photo: 'female.png',
-    name: 'Ruba Fajria Restu',
-    position: 'Wakil Ketua OSIS',
-    motto: 'perbaiki masa depan dengan menciptakannya',
-  },
-  {
-    photo: 'male.png',
-    name: 'Candra Juliana',
-    position: 'Sekertaris I',
-    motto: 'Tidur lebih baik daripada mengkhawatirkan takdir',
-  },
-  {
-    photo: 'female.png',
-    name: 'Sulistiani khofifah',
-    position: 'Sekertaris II',
-    motto: 'Yakin pada diri sendiri adalah kunci untuk mencapai apapun',
-  },
-  {
-    photo: 'female.png',
-    name: 'Emma siti maesaroh',
-    position: 'Bendahara I',
-    motto: 'Jadilah versi terbaik dari dirimu setiap hari',
-  },
-  {
-    photo: 'male.png',
-    name: 'M.Rizky Al Mubarok',
-    position: 'Bendahara II',
-    motto: 'Manusia adalah apa yang ia pikirkan sepanjang hari',
-  },
-]
+import { supabase } from '../lib/supabase'
+import { Member } from '../components/admin/MemberList'
 
 const Members = () => {
+  const [members, setMembers] = useState<Member[]>([])
+  const fetchMembers = async () => {
+    try {
+      const { data, error } = await supabase.from('members').select('*')
+      if (error) throw error
+      setMembers(data || [])
+    } catch (error) {
+      console.error('Error fetching members:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchMembers()
+  }, [])
+
   return (
     <div className='min-h-screen bg-gradient-to-b from-green-700 to-green-500'>
       {/* Header */}
@@ -64,8 +42,8 @@ const Members = () => {
             <Card
               motto={member.motto}
               name={member.name}
-              photo={member.photo}
-              position={member.position}
+              gender={member.gender}
+              role={member.role}
               key={index}
             />
           ))}
