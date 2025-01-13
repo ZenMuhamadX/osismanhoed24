@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react'
-import { UserCard } from './UserCard'
+import { AdminUserCard } from './AdminUserCard'
 import { supabase } from '../../lib/supabase'
 import { UserPlus, Users, Loader2 } from 'lucide-react'
 import { checkSession } from '../../lib/checkSession'
-import { BackToDashboardButton } from '../button/backToDashboard'
+import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
 
 export interface Member {
   id: number
@@ -13,7 +13,7 @@ export interface Member {
   motto: string
 }
 
-export const MemberList: FC = () => {
+export const AdminMemberList: FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [members, setMembers] = useState<Member[]>([])
   const [newMember, setNewMember] = useState({
@@ -123,7 +123,7 @@ export const MemberList: FC = () => {
             key={member.id}
             className='relative p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow'
           >
-            <UserCard
+            <AdminUserCard
               name={member.name}
               role={member.role}
               gender={member.gender}

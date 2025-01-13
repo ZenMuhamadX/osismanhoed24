@@ -1,7 +1,7 @@
 import { Outlet, useNavigation } from 'react-router-dom'
-import Header from './components/Header'
+import { Header } from './components/Header'
 
-export const MainLayout = () => {
+export const App = () => {
   const navigation = useNavigation()
 
   return (

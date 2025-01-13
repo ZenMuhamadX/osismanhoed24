@@ -2,7 +2,7 @@ import { FaInstagram, FaWhatsapp, FaEnvelope, FaYoutube } from 'react-icons/fa' 
 
 const year = new Date().getFullYear()
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer className='bg-gray-800 text-white py-12'>
       <div className='container mx-auto px-5 -py-10'>
@@ -96,5 +96,3 @@ const Footer = () => {
     </footer>
   )
 }
-
-export default Footer

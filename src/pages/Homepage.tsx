@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar, Target, List } from 'lucide-react'
-import Footer from '../components/Footer'
+import { Footer } from '../components/Footer'
 import { supabase } from '../lib/supabase'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +9,7 @@ interface Program {
   title: string
 }
 
-const Homepage = () => {
+export const Homepage = () => {
   const [programs, setPrograms] = useState<Program[]>([])
   const navigate = useNavigate()
   const fetchPrograms = async () => {
@@ -127,5 +127,3 @@ const Homepage = () => {
     </div>
   )
 }
-
-export default Homepage

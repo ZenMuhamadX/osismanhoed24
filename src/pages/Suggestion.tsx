@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { Send, CheckCircle } from 'lucide-react'
-import { BackButton } from '../components/button/BackButton'
+import { BackButton } from '../components/Button/BackButton/BackButton'
 import { supabase } from '../lib/supabase'
-import Footer from '../components/Footer'
+import { Footer } from '../components/Footer'
+import { genId } from '../lib/genId'
 
 export const Suggestion = () => {
   const [formData, setFormData] = useState({
     name: '',
     class: '',
     message: '',
+    id: '',
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -19,14 +21,31 @@ export const Suggestion = () => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
+      id: genId(),
       [name]: value,
     }))
   }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
+    // **Validasi input**
     setIsSubmitting(true)
     setError('')
+    if (
+      !formData.name.trim() || // Name tidak boleh kosong atau hanya spasi
+      !formData.class.trim() || // Class tidak boleh kosong atau hanya spasi
+      !formData.message.trim() || // Message tidak boleh kosong atau hanya spasi
+      formData.message.trim().length < 5 // Message minimal 5 karakter
+    ) {
+      setError('Semua field wajib diisi, dan saran minimal 5 karakter.')
+      setIsSubmitting(false)
+      setSubmitStatus('error')
+      // Reset status after 3 seconds
+      setTimeout(() => {
+        setSubmitStatus('')
+      }, 3000)
+      return
+    }
 
     try {
       const response = await supabase.from('suggestions').insert(formData)
@@ -36,20 +55,19 @@ export const Suggestion = () => {
       }
 
       setSubmitStatus('success')
-      setFormData({ name: '', class: '', message: '' })
+      setFormData({ name: '', class: '', message: '', id: '' })
 
       // Reset status after 3 seconds
       setTimeout(() => {
         setSubmitStatus('')
       }, 3000)
     } catch (err: any) {
-      setError(err?.message)
+      setError(err?.message || 'Terjadi kesalahan saat mengirim data.')
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
     }
   }
-
   return (
     <div className='bg-gradient-to-b from-green-700 to-green-500'>
       {/* Form Container */}
@@ -71,6 +89,7 @@ export const Suggestion = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                autoComplete='off'
                 className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all'
                 placeholder='Masukkan nama (boleh anonim)'
               />
@@ -91,6 +110,7 @@ export const Suggestion = () => {
                 value={formData.class}
                 onChange={handleChange}
                 required
+                autoComplete='off'
                 className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all'
                 placeholder='Contoh: XI IPA 1'
               />
@@ -110,6 +130,7 @@ export const Suggestion = () => {
                 value={formData.message}
                 onChange={handleChange}
                 required
+                autoComplete='off'
                 className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all resize-none'
                 placeholder='Tuliskan saran atau aspirasi Anda...'
               />

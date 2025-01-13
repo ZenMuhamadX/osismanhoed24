@@ -7,7 +7,7 @@ interface CardProps {
   motto: string
 }
 
-const Card: React.FC<CardProps> = ({ gender, name, role, motto }) => {
+export const Card: React.FC<CardProps> = ({ gender, name, role, motto }) => {
   let photo = gender === 'male' ? 'male.png' : 'female.png'
   if (name === 'HJ JOHAN JOHARIANSYAH SPD') photo = 'Pembina.jpg'
 
@@ -36,5 +36,3 @@ const Card: React.FC<CardProps> = ({ gender, name, role, motto }) => {
     </div>
   )
 }
-
-export default Card
