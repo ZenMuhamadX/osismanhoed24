@@ -2,14 +2,14 @@ import { FC, useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { ClipboardList, Plus, Trash2, Loader2, Folder } from 'lucide-react'
 import { checkSession } from '../../lib/checkSession'
-import { BackToDashboardButton } from '../button/backToDashboard'
+import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
 
 interface Program {
   id: number
   title: string
 }
 
-export const ProgramList: FC = () => {
+export const AdminProgramList: FC = () => {
   const [programs, setPrograms] = useState<Program[]>([])
   const [newProgram, setNewProgram] = useState('')
   const [isLoading, setIsLoading] = useState(false)

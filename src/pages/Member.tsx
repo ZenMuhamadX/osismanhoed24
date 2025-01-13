@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { BackButton } from '../components/button/BackButton'
-import Card from '../components/Card'
-import Footer from '../components/Footer'
+import { BackButton } from '../components/Button/BackButton/BackButton'
+import { Card } from '../components/Card'
+import { Footer } from '../components/Footer'
 import { supabase } from '../lib/supabase'
-import { Member } from '../components/admin/MemberList'
+import { Member } from '../components/Admin/AdminMemberList'
 
-const Members = () => {
+export const Members = () => {
   const [members, setMembers] = useState<Member[]>([])
   const fetchMembers = async () => {
     try {
@@ -54,5 +54,3 @@ const Members = () => {
     </div>
   )
 }
-
-export default Members

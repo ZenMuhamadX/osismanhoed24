@@ -9,7 +9,7 @@ interface UserCardProps {
   onDelete: () => Promise<void> // Fungsi untuk delete user
 }
 
-export const UserCard: FC<UserCardProps> = ({
+export const AdminUserCard: FC<UserCardProps> = ({
   name,
   role,
   gender,

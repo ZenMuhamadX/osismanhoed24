@@ -1,6 +1,8 @@
-import crypto from 'crypto'
 export const genId = (): string => {
-  const randomBytes = crypto.randomBytes(32)
-  return `0x${crypto.createHash('SHA256').update(randomBytes).digest('hex').slice(0, 12).toUpperCase()}`
+  const randomBytes = new Uint8Array(16)
+  window.crypto.getRandomValues(randomBytes)
+  const ID = Array.from(randomBytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+  return `0x${ID.slice(0, 8).toUpperCase()}`
 }
-console.log(genId())

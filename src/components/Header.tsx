@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { LoginButton } from './button/Log-in-outButton'
+import { Login_out_Button } from './Button/LoginButton/Log-in-outButton'
 import {
   Users,
   MessageSquare,
@@ -10,7 +10,7 @@ import {
   Home,
 } from 'lucide-react'
 
-const Header = () => {
+export const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false)
 
   // Menutup menu saat scroll atau klik di luar
@@ -60,7 +60,7 @@ const Header = () => {
 
             {/* Actions Section with better spacing */}
             <div className='flex items-center gap-3 sm:gap-4 shrink-0'>
-              <LoginButton />
+              <Login_out_Button />
 
               {/* Menu Button */}
               <button
@@ -133,5 +133,3 @@ const Header = () => {
     </header>
   )
 }
-
-export default Header

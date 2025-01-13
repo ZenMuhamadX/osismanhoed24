@@ -5,7 +5,7 @@ interface HeaderProps {
   role: string
 }
 
-export const Header: FC<HeaderProps> = ({ role }) => {
+export const AdminHeader: FC<HeaderProps> = ({ role }) => {
   return (
     <header className='relative overflow-hidden'>
       {/* Background with gradient */}

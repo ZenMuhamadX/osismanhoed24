@@ -5,13 +5,15 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  Hash,
+  Layers,
   Loader2,
   MessageSquare,
   Trash2,
   User,
   X,
 } from 'lucide-react'
-import { BackToDashboardButton } from '../button/backToDashboard'
+import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
 
 interface Suggestion {
   id: number
@@ -19,9 +21,10 @@ interface Suggestion {
   message: string
   created_at: string
   status: 'unread' | 'read'
+  class: string
 }
 
-export const SuggestionList: FC = () => {
+export const AdminSuggestionList: FC = () => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -131,9 +134,35 @@ export const SuggestionList: FC = () => {
               </button>
             </div>
             <p
-              className={`mt-2 ${suggestion.status === 'unread' ? 'text-white/90' : 'text-gray-600'}`}
+              className={`mt-2 ${
+                suggestion.status === 'unread'
+                  ? 'text-white/90'
+                  : 'text-gray-600'
+              }`}
             >
               {suggestion.message.slice(0, 50)}...
+            </p>
+            {/* Bagian ID Saran */}
+            <p
+              className={`text-sm mt-2 flex items-center gap-1 ${
+                suggestion.status === 'unread'
+                  ? 'text-white/80'
+                  : 'text-gray-500'
+              }`}
+            >
+              <Hash className='w-4 h-4' />
+              <span>ID: {suggestion.id}</span>
+            </p>
+            {/* Bagian Kelas */}
+            <p
+              className={`text-sm mt-2 flex items-center gap-1 ${
+                suggestion.status === 'unread'
+                  ? 'text-white/80'
+                  : 'text-gray-500'
+              }`}
+            >
+              <Layers className='w-4 h-4' />
+              {suggestion.class || 'Tidak ada kelas'}
             </p>
             <p
               className={`text-sm mt-2 flex items-center gap-1 ${
@@ -203,6 +232,11 @@ export const SuggestionList: FC = () => {
                   <User className='w-5 h-5 text-green-600' />
                   <span className='font-semibold'>Nama:</span>
                   <span>{selectedSuggestion.name}</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <Layers className='w-5 h-5 text-green-600' />
+                  <span className='font-semibold'>Kelas:</span>
+                  <span>{selectedSuggestion.class}</span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <Calendar className='w-5 h-5 text-green-600' />

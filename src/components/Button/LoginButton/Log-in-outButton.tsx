@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { supabase } from '../../lib/supabase'
+import { supabase } from '../../../lib/supabase'
 import { LogIn, LogOut, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 
-export const LoginButton = () => {
+export const Login_out_Button = () => {
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [toastType, setToastType] = useState<'success' | 'error'>('success')

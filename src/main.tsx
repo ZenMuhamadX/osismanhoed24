@@ -1,26 +1,26 @@
 import './index.css'
-import PageNotFound from './components/notFound/PageNotFound'
+import { PageNotFound } from './components/NotFound/PageNotFound'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import HomePage from './pages/Homepage'
-import { MainLayout } from './MainLayout'
-import Members from './pages/Member'
+import { Homepage } from './pages/Homepage'
+import { App } from './App'
+import { Members } from './pages/Member'
 import { Suggestion } from './pages/Suggestion'
-import LoginPage from './pages/Login'
+import { LoginPage } from './pages/Login'
 import { Dashboard } from './pages/Dashboard'
-import { MemberList } from './components/admin/MemberList'
-import { ProgramList } from './components/admin/ProgramList'
-import { SuggestionList } from './components/admin/SuggestionList'
+import { AdminMemberList } from './components/Admin/AdminMemberList'
+import { AdminProgramList } from './components/Admin/AdminProgramList'
+import { AdminSuggestionList } from './components/Admin/AdminSuggestionList'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout />,
+    element: <App />,
     children: [
       {
         path: '/',
-        element: <HomePage />,
+        element: <Homepage />,
       },
       {
         path: 'members',
@@ -40,15 +40,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/members',
-        element: <MemberList />,
+        element: <AdminMemberList />,
       },
       {
         path: '/dashboard/programs',
-        element: <ProgramList />,
+        element: <AdminProgramList />,
       },
       {
         path: '/dashboard/suggestions',
-        element: <SuggestionList />,
+        element: <AdminSuggestionList />,
       },
     ],
     errorElement: <PageNotFound />,

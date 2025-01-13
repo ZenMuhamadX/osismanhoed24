@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { BackButton } from '../components/button/BackButton'
+import { BackButton } from '../components/Button/BackButton/BackButton'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react' // Import ikon dari Lucide
 import { useNavigate } from 'react-router-dom'
 
-const LoginPage: React.FC = () => {
+export const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -170,5 +170,3 @@ const LoginPage: React.FC = () => {
     </div>
   )
 }
-
-export default LoginPage

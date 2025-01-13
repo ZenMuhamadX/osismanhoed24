@@ -1,4 +1,4 @@
-import { Header } from '../components/admin/Header'
+import { AdminHeader } from '../components/Admin/AdminHeader'
 import {
   Users,
   ClipboardList,
@@ -64,7 +64,7 @@ export const Dashboard = () => {
 
   return (
     <div className='min-h-screen bg-gray-50'>
-      <Header role={user.user_metadata.display_name} />
+      <AdminHeader role={user.user_metadata.display_name} />
 
       <main className='container mx-auto px-4 py-8'>
         {isExactPath ? (
