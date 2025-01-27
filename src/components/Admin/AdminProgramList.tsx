@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import { ClipboardList, Plus, Trash2, Loader2, Folder } from 'lucide-react'
-import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
+import { BackToDashboardButton } from '../Button/BackButton/BackPrevRoute'
 import { useProgramActions } from '../../hooks/adminPages/useProgramActions'
 import { usePrograms } from '../../hooks/adminPages/useProgram'
 import { checkSession } from '../../lib/checkSession'

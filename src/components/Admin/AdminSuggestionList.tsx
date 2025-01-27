@@ -11,7 +11,7 @@ import {
   X,
   Loader2,
 } from 'lucide-react'
-import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
+import { BackToDashboardButton } from '../Button/BackButton/BackPrevRoute'
 import { useSuggestions } from '../../hooks/adminPages/useSuggestions'
 import { useSuggestionActions } from '../../hooks/adminPages/useSuggestionActions'
 import { Suggestion } from '../../types'

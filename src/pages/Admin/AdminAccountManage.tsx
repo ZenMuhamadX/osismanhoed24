@@ -1,7 +1,7 @@
 import React from 'react'
 import { User, ChevronRight, Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { BackToDashboardButton } from '../../components/Button/BackButton/backToDashboard'
+import { BackToDashboardButton } from '../../components/Button/BackButton/BackPrevRoute'
 import { useUserData } from '../../hooks/useUserData'
 import { menuItems } from './menuItems'
 import { getAvatars } from '../../lib/getAvatars'
