@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import { AdminUserCard } from './AdminUserCard'
 import { UserPlus, Users, Loader2 } from 'lucide-react'
-import { BackToDashboardButton } from '../../components/Button/BackButton/backToDashboard'
+import { BackToDashboardButton } from '../Button/BackButton/BackPrevRoute'
 import { useMembers } from '../../hooks/adminPages/useMembers'
 import { useMemberActions } from '../../hooks/adminPages/useMembersAction'
 import { Member } from '../../types'
