@@ -10,10 +10,11 @@ import {
   ImageIcon,
   BadgeCheck,
 } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AdminHeader } from '../components/Admin/AdminHeader'
-import { checkSession } from '../lib/checkSession'
 import { getAvatars } from '../lib/getAvatars'
+import { useUserData } from '../hooks/useUserData'
+import { checkSession } from '../lib/checkSession'
 // Menu item type
 interface MenuItem {
   title: string
@@ -25,6 +26,8 @@ interface MenuItem {
 }
 
 export const Dashboard: React.FC = () => {
+  const navigate = useNavigate()
+  const { userData } = useUserData()
   const { user } = checkSession()
   const location = useLocation()
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
@@ -51,10 +54,10 @@ export const Dashboard: React.FC = () => {
   // Fetch avatar URL from Supabase Storage
   useEffect(() => {
     const fetchAvatar = async () => {
-      if (user) {
+      if (userData) {
         try {
           // Check if avatar_id exists
-          const avatarId = user.user_metadata.avatar_id
+          const avatarId = userData.data.user?.user_metadata.avatar_id
 
           if (!avatarId) {
             setAvatarError(true)
@@ -80,7 +83,7 @@ export const Dashboard: React.FC = () => {
     }
 
     fetchAvatar()
-  }, [user])
+  }, [userData])
 
   const menuItems: MenuItem[] = [
     {
@@ -137,14 +140,14 @@ export const Dashboard: React.FC = () => {
   }
 
   if (!user) {
-    return null // Or redirect logic
+    navigate('/login') // Or redirect logic
   }
 
   const isExactPath = location.pathname === '/dashboard'
 
   return (
     <div className='min-h-screen bg-gradient-to-r from-green-700 to-green-500'>
-      <AdminHeader role={user.user_metadata.display_name} />
+      <AdminHeader role={userData?.data.user?.user_metadata.display_name} />
 
       <main className='container mx-auto px-4 py-8'>
         {isExactPath && (
@@ -167,7 +170,9 @@ export const Dashboard: React.FC = () => {
                   </div>
                 ) : (
                   <div className='relative'>
-                    {getAvatarPlaceholder(user.user_metadata.display_name)}
+                    {getAvatarPlaceholder(
+                      userData?.data?.user?.user_metadata.display_name,
+                    )}
                     <div className='absolute bottom-0 right-0 bg-white rounded-full p-1'>
                       <ImageIcon
                         className='text-gray-500'
@@ -181,10 +186,11 @@ export const Dashboard: React.FC = () => {
 
               <div className='text-white space-y-2'>
                 <h2 className='text-3xl font-bold flex items-center justify-center gap-2'>
-                  Selamat Datang, {user.user_metadata.display_name}
+                  Selamat Datang,{' '}
+                  {userData?.data.user?.user_metadata.display_name}
                 </h2>
                 <p className='text-lg text-green-100 flex items-center justify-center gap-2'>
-                  Role: {user.user_metadata.role}
+                  Role: {userData?.data.user?.user_metadata.role}
                 </p>
                 {avatarError && (
                   <div className='text-sm text-yellow-200 flex items-center justify-center gap-2 mt-2'>
