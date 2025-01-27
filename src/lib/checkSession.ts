@@ -1,12 +1,11 @@
 // hooks/useAuth.js
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { redirect } from 'react-router-dom'
 import { supabase } from './supabase'
 import { User } from '@supabase/supabase-js'
 
 export const checkSession = () => {
   const [user, setUser] = useState<User | null>(null)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const checkSession = async () => {
@@ -16,11 +15,11 @@ export const checkSession = () => {
         if (data.session) {
           setUser(data.session.user)
         } else {
-          navigate('/login')
+          redirect('/login')
         }
       } catch (error) {
         console.error('Error checking session:', error)
-        navigate('/login')
+        redirect('/login')
       }
     }
     checkSession()
@@ -30,7 +29,7 @@ export const checkSession = () => {
         if (session) {
           setUser(session.user)
         } else {
-          navigate('/login')
+          redirect('/login')
         }
       },
     )
@@ -38,7 +37,7 @@ export const checkSession = () => {
     return () => {
       subscriptionData?.subscription?.unsubscribe()
     }
-  }, [navigate])
+  }, [redirect])
 
   return { user }
 }
