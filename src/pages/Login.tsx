@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { BackButton } from '../components/Button/BackButton/BackButton'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react' // Import ikon dari Lucide
 import { useNavigate } from 'react-router-dom'
 
@@ -159,10 +158,8 @@ export const LoginPage: React.FC = () => {
             )}
           </button>
         </form>
-        {/* Back Button */}
         <div>
-          <BackButton />
-          <p className='text-center font-mono text-sm text-gray-500'>
+          <p className='text-center font-mono text-sm mt-4 text-gray-500'>
             Login untuk mengakses dashboard
           </p>
         </div>
