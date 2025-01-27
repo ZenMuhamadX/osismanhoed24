@@ -9,14 +9,14 @@ import { Members } from './pages/Member'
 import { Suggestion } from './pages/Suggestion'
 import { LoginPage } from './pages/Login'
 import { Dashboard } from './pages/Dashboard'
-import { AdminMemberList } from './components/Admin/AdminMemberList'
 import { AdminProgramList } from './components/Admin/AdminProgramList'
 import { AdminSuggestionList } from './components/Admin/AdminSuggestionList'
-import { AdminAccountManage } from './components/Admin/AdminAccountManage'
-import { ChangePassword } from './components/Admin/pages/ChangePassword'
-import { ChangeDisplayName } from './components/Admin/pages/ChangeDisplayName'
-import { AdminLastLogin } from './components/Admin/pages/AdminLastLogin'
-import { ChangeAvatar } from './components/Admin/pages/ChangeAvatar'
+import { ChangePassword } from './pages/Admin/ChangePassword'
+import { ChangeDisplayName } from './pages/Admin/ChangeDisplayName'
+import { ChangeAvatar } from './pages/Admin/ChangeAvatar'
+import { AdminMemberList } from './components/Admin/AdminMemberList'
+import { AdminAccountManage } from './pages/Admin/AdminAccountManage'
+import { AdminLastLogin } from './pages/Admin/AdminLastLogin'
 
 const router = createBrowserRouter([
   {
@@ -28,19 +28,19 @@ const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
-        path: 'members',
+        path: '/members',
         element: <Members />,
       },
       {
-        path: 'suggestion',
+        path: '/suggestion',
         element: <Suggestion />,
       },
       {
-        path: 'login',
+        path: '/login',
         element: <LoginPage />,
       },
       {
-        path: 'dashboard',
+        path: '/dashboard',
         element: <Dashboard />,
       },
       {
