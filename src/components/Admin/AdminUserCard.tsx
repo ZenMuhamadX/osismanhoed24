@@ -1,13 +1,7 @@
 import { FC } from 'react'
 import { User, Briefcase, Trash2 } from 'lucide-react' // Import icon dari Lucide React
 import { IoFemale, IoMale } from 'react-icons/io5'
-
-interface UserCardProps {
-  name: string
-  role: string
-  gender: 'male' | 'female' // Gender sebagai props
-  onDelete: () => Promise<void> // Fungsi untuk delete user
-}
+import { UserCardProps } from '../../types'
 
 export const AdminUserCard: FC<UserCardProps> = ({
   name,

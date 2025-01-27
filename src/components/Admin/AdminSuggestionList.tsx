@@ -1,86 +1,31 @@
-import { FC, useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase'
-import { checkSession } from '../../lib/checkSession'
+import { FC, useState } from 'react'
 import {
-  Calendar,
+  MessageSquare,
   ChevronLeft,
   ChevronRight,
-  Hash,
-  Layers,
-  Loader2,
-  MessageSquare,
   Trash2,
   User,
+  Calendar,
+  Layers,
+  Hash,
   X,
+  Loader2,
 } from 'lucide-react'
 import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
-
-interface Suggestion {
-  id: number
-  name: string
-  message: string
-  created_at: string
-  status: 'unread' | 'read'
-  class: string
-}
+import { useSuggestions } from '../../hooks/adminPages/useSuggestions'
+import { useSuggestionActions } from '../../hooks/adminPages/useSuggestionActions'
+import { Suggestion } from '../../types'
+import { checkSession } from '../../lib/checkSession'
 
 export const AdminSuggestionList: FC = () => {
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [selectedSuggestion, setSelectedSuggestion] =
-    useState<Suggestion | null>(null) // Untuk modal
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<Suggestion | null>(null)
 
-  const pageSize = 5 // Jumlah saran per halaman
-
-  // Fetch suggestions dari Supabase
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      const { data, count } = await supabase
-        .from('suggestions')
-        .select('*', { count: 'exact' })
-        .order('created_at', { ascending: false })
-        .range((currentPage - 1) * pageSize, currentPage * pageSize - 1)
-
-      setSuggestions(data || [])
-      setTotalPages(Math.ceil((count || 0) / pageSize))
-    }
-
-    fetchSuggestions()
-  }, [currentPage])
-
-  // Mark suggestion as read
-  const markAsRead = async (id: number) => {
-    await supabase.from('suggestions').update({ status: 'read' }).eq('id', id)
-
-    setSuggestions((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, status: 'read' } : s)),
-    )
-  }
-
-  // Open modal
-  const openModal = (suggestion: Suggestion) => {
-    setSelectedSuggestion(suggestion)
-    setIsModalOpen(true)
-
-    if (suggestion.status === 'unread') {
-      markAsRead(suggestion.id) // Mark as read ketika dibuka
-    }
-  }
-
-  // Close modal
-  const closeModal = () => {
-    setSelectedSuggestion(null)
-    setIsModalOpen(false)
-  }
-
-  // Delete suggestion
-  const deleteSuggestion = async (id: number) => {
-    await supabase.from('suggestions').delete().eq('id', id)
-
-    setSuggestions((prev) => prev.filter((s) => s.id !== id))
-  }
+  const pageSize = 5
+  const { suggestions, totalPages } = useSuggestions(currentPage, pageSize)
+  const { markAsRead, deleteSuggestion } = useSuggestionActions()
 
   const { user } = checkSession()
 
@@ -95,11 +40,24 @@ export const AdminSuggestionList: FC = () => {
     )
   }
 
+  const openModal = (suggestion: Suggestion) => {
+    setSelectedSuggestion(suggestion)
+    setIsModalOpen(true)
+    if (suggestion.status === 'unread') {
+      markAsRead(suggestion.id)
+    }
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedSuggestion(null)
+  }
+
   return (
     <div className='p-4 md:p-6'>
       <div className='flex items-center gap-2 mb-6'>
         <MessageSquare className='w-6 h-6 text-green-700' />
-        <h2 className='text-2xl font-bold text-green-700'>Kotak saran</h2>
+        <h2 className='text-2xl font-bold text-green-700'>Kotak Saran</h2>
         <div className='ml-auto'>
           <BackToDashboardButton />
         </div>
@@ -122,9 +80,7 @@ export const AdminSuggestionList: FC = () => {
                 {suggestion.name}
               </h3>
               <button
-                className={`p-2 rounded-full hover:bg-opacity-10 hover:bg-black transition-colors ${
-                  suggestion.status === 'unread' ? 'text-white' : 'text-red-500'
-                }`}
+                className={`p-2 rounded-full hover:bg-opacity-10 hover:bg-black transition-colors ${suggestion.status === 'unread' ? 'text-white' : 'text-red-500'}`}
                 onClick={(e) => {
                   e.stopPropagation()
                   deleteSuggestion(suggestion.id)
@@ -134,42 +90,24 @@ export const AdminSuggestionList: FC = () => {
               </button>
             </div>
             <p
-              className={`mt-2 ${
-                suggestion.status === 'unread'
-                  ? 'text-white/90'
-                  : 'text-gray-600'
-              }`}
+              className={`mt-2 ${suggestion.status === 'unread' ? 'text-white/90' : 'text-gray-600'}`}
             >
               {suggestion.message.slice(0, 50)}...
             </p>
-            {/* Bagian ID Saran */}
             <p
-              className={`text-sm mt-2 flex items-center gap-1 ${
-                suggestion.status === 'unread'
-                  ? 'text-white/80'
-                  : 'text-gray-500'
-              }`}
+              className={`text-sm mt-2 flex items-center gap-1 ${suggestion.status === 'unread' ? 'text-white/80' : 'text-gray-500'}`}
             >
               <Hash className='w-4 h-4' />
               <span>ID: {suggestion.id}</span>
             </p>
-            {/* Bagian Kelas */}
             <p
-              className={`text-sm mt-2 flex items-center gap-1 ${
-                suggestion.status === 'unread'
-                  ? 'text-white/80'
-                  : 'text-gray-500'
-              }`}
+              className={`text-sm mt-2 flex items-center gap-1 ${suggestion.status === 'unread' ? 'text-white/80' : 'text-gray-500'}`}
             >
               <Layers className='w-4 h-4' />
               {suggestion.class || 'Tidak ada kelas'}
             </p>
             <p
-              className={`text-sm mt-2 flex items-center gap-1 ${
-                suggestion.status === 'unread'
-                  ? 'text-white/80'
-                  : 'text-gray-500'
-              }`}
+              className={`text-sm mt-2 flex items-center gap-1 ${suggestion.status === 'unread' ? 'text-white/80' : 'text-gray-500'}`}
             >
               <Calendar className='w-4 h-4' />
               {new Date(suggestion.created_at).toLocaleString()}
@@ -181,13 +119,9 @@ export const AdminSuggestionList: FC = () => {
       {/* Pagination */}
       <div className='flex justify-center items-center mt-8 gap-4'>
         <button
-          disabled={currentPage === 1 || suggestions.length === 0}
+          disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          className={`p-2 rounded-full transition-colors ${
-            currentPage === 1 || suggestions.length === 0
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-green-100 text-green-700 hover:bg-green-200'
-          }`}
+          className={`p-2 rounded-full transition-colors ${currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
         >
           <ChevronLeft className='w-5 h-5' />
         </button>
@@ -195,15 +129,11 @@ export const AdminSuggestionList: FC = () => {
           {currentPage}
         </span>
         <button
-          disabled={currentPage === totalPages || suggestions.length === 0}
+          disabled={currentPage === totalPages}
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
-          className={`p-2 rounded-full transition-colors ${
-            currentPage === totalPages || suggestions.length === 0
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-green-100 text-green-700 hover:bg-green-200'
-          }`}
+          className={`p-2 rounded-full transition-colors ${currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
         >
           <ChevronRight className='w-5 h-5' />
         </button>

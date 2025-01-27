@@ -1,86 +1,19 @@
-import { FC, useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { FC, useState } from 'react'
 import { ClipboardList, Plus, Trash2, Loader2, Folder } from 'lucide-react'
-import { checkSession } from '../../lib/checkSession'
 import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
-
-interface Program {
-  id: number
-  title: string
-}
+import { useProgramActions } from '../../hooks/adminPages/useProgramActions'
+import { usePrograms } from '../../hooks/adminPages/useProgram'
+import { checkSession } from '../../lib/checkSession'
 
 export const AdminProgramList: FC = () => {
-  const [programs, setPrograms] = useState<Program[]>([])
   const [newProgram, setNewProgram] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchPrograms = async () => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      const { data, error } = await supabase.from('programs').select('*')
-
-      if (error) throw error
-      setPrograms(data || [])
-    } catch (err) {
-      console.error('Error fetching programs:', err)
-      setError('Gagal memuat program kerja')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchPrograms()
-  }, [])
-
-  const addProgram = async () => {
-    if (!newProgram.trim()) {
-      setError('Program kerja tidak boleh kosong')
-      return
-    }
-
-    try {
-      setIsLoading(true)
-      setError(null)
-      const { error } = await supabase
-        .from('programs')
-        .insert([{ title: newProgram.trim() }])
-
-      if (error) throw error
-
-      setNewProgram('')
-      await fetchPrograms()
-    } catch (err) {
-      console.error('Error adding program:', err)
-      setError('Gagal menambahkan program kerja')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const deleteProgram = async (id: number) => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      const { error } = await supabase.from('programs').delete().eq('id', id)
-
-      if (error) throw error
-      setPrograms((prev) => prev.filter((program) => program.id !== id))
-    } catch (err) {
-      console.error('Error deleting program:', err)
-      setError('Gagal menghapus program kerja')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !isLoading) {
-      addProgram()
-    }
-  }
+  const {
+    programs,
+    isLoading: isFetching,
+    error: fetchError,
+    fetchPrograms,
+  } = usePrograms()
+  const { isLoading, error, addProgram, deleteProgram } = useProgramActions()
 
   const { user } = checkSession()
 
@@ -95,6 +28,13 @@ export const AdminProgramList: FC = () => {
     )
   }
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !isLoading) {
+      addProgram(newProgram, fetchPrograms)
+      setNewProgram('')
+    }
+  }
+
   return (
     <div className='p-4 sm:p-6 bg-white rounded-lg shadow-lg'>
       <div className='flex items-center gap-2 mb-6'>
@@ -104,6 +44,12 @@ export const AdminProgramList: FC = () => {
           <BackToDashboardButton />
         </div>
       </div>
+
+      {fetchError && (
+        <div className='mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg'>
+          {fetchError}
+        </div>
+      )}
 
       {error && (
         <div className='mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg'>
@@ -125,7 +71,10 @@ export const AdminProgramList: FC = () => {
         </div>
         <div className='mb-6'>
           <button
-            onClick={addProgram}
+            onClick={() => {
+              addProgram(newProgram, fetchPrograms)
+              setNewProgram('')
+            }}
             disabled={isLoading}
             className='w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-700 hover:bg-green-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
           >
@@ -139,7 +88,7 @@ export const AdminProgramList: FC = () => {
         </div>
       </div>
 
-      {isLoading && programs.length === 0 ? (
+      {isFetching && programs.length === 0 ? (
         <div className='flex items-center justify-center p-8 text-gray-500'>
           <Loader2 className='w-6 h-6 animate-spin mr-2' />
           Memuat program kerja...
@@ -168,7 +117,7 @@ export const AdminProgramList: FC = () => {
 
               {/* Tombol Hapus */}
               <button
-                onClick={() => deleteProgram(program.id)}
+                onClick={() => deleteProgram(program.id, fetchPrograms)}
                 disabled={isLoading}
                 className='flex items-center gap-2 px-3 py-1.5 text-red-500 hover:text-white hover:bg-red-500 rounded-lg border border-red-500 transition-all duration-150 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed'
               >

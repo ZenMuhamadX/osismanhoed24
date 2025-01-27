@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Login_out_Button } from './Button/LoginButton/Log-in-outButton'
 import {
@@ -9,26 +8,10 @@ import {
   LayoutDashboardIcon,
   Home,
 } from 'lucide-react'
+import { useMenuToggle } from '../hooks/useMenuToogle'
 
 export const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  // Menutup menu saat scroll atau klik di luar
-  useEffect(() => {
-    const handleCloseMenu = () => {
-      if (menuOpen) setMenuOpen(false) // Hanya ubah jika menu sedang terbuka
-    }
-
-    // Tambahkan event listener untuk scroll dan klik
-    window.addEventListener('scroll', handleCloseMenu)
-    window.addEventListener('click', handleCloseMenu)
-
-    // Cleanup listener saat komponen unmount
-    return () => {
-      window.removeEventListener('scroll', handleCloseMenu)
-      window.removeEventListener('click', handleCloseMenu)
-    }
-  }, [menuOpen])
+  const [menuOpen, setMenuOpen] = useMenuToggle(false)
 
   return (
     <header className='sticky top-0 z-50'>

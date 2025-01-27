@@ -1,92 +1,22 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { AdminUserCard } from './AdminUserCard'
-import { supabase } from '../../lib/supabase'
 import { UserPlus, Users, Loader2 } from 'lucide-react'
+import { BackToDashboardButton } from '../../components/Button/BackButton/backToDashboard'
+import { useMembers } from '../../hooks/adminPages/useMembers'
+import { useMemberActions } from '../../hooks/adminPages/useMembersAction'
+import { Member } from '../../types'
 import { checkSession } from '../../lib/checkSession'
-import { BackToDashboardButton } from '../Button/BackButton/backToDashboard'
-
-export interface Member {
-  id: number
-  name: string
-  role: string
-  gender: 'male' | 'female'
-  motto: string
-}
 
 export const AdminMemberList: FC = () => {
-  const [error, setError] = useState<string | null>(null)
-  const [members, setMembers] = useState<Member[]>([])
-  const [newMember, setNewMember] = useState({
+  const [newMember, setNewMember] = useState<Member>({
     name: '',
     role: '',
     gender: 'male' as 'male' | 'female',
     motto: '',
   })
-  const [isLoading, setIsLoading] = useState(false)
 
-  const fetchMembers = async () => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      const { data, error } = await supabase.from('members').select('*')
-      if (error) throw error
-      setMembers(data || [])
-    } catch (error) {
-      console.error('Error fetching members:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchMembers()
-  }, [])
-
-  const addMember = async () => {
-    if (!newMember.name || !newMember.role) {
-      setError('Nama dan Role harus diisi!')
-      setTimeout(() => {
-        setError(null)
-      }, 3000)
-      return
-    }
-
-    try {
-      setIsLoading(true)
-      setError(null)
-      const { error } = await supabase.from('members').insert([newMember])
-      if (error) throw error
-
-      setNewMember({ name: '', role: '', gender: 'male', motto: '' })
-      fetchMembers()
-    } catch (error) {
-      console.error('Error adding member:', error)
-      setError('Gagal menambahkan anggota.')
-      setTimeout(() => {
-        setError(null)
-      }, 3000)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const deleteMember = async (id: number) => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      const { error } = await supabase.from('members').delete().eq('id', id)
-      if (error) throw error
-      fetchMembers()
-    } catch (error) {
-      console.error('Error deleting member:', error)
-      setError('Gagal menghapus anggota.')
-      setTimeout(() => {
-        setError(null)
-      }, 3000)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const { members, isfetching, error: fetchError, fetchMembers } = useMembers()
+  const { isLoading, error, addMember, deleteMember } = useMemberActions()
 
   const { user } = checkSession()
 
@@ -111,6 +41,12 @@ export const AdminMemberList: FC = () => {
         </div>
       </div>
 
+      {fetchError && (
+        <div className='mb-4 p-2 bg-red-50 border border-red-200 text-red-600 rounded-lg'>
+          {fetchError}
+        </div>
+      )}
+
       {error && (
         <div className='mb-4 p-2 bg-red-50 border border-red-200 text-red-600 rounded-lg'>
           {error}
@@ -118,16 +54,16 @@ export const AdminMemberList: FC = () => {
       )}
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6'>
-        {members.map((member) => (
+        {members.map((member, i) => (
           <div
-            key={member.id}
+            key={i}
             className='relative p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow'
           >
             <AdminUserCard
               name={member.name}
               role={member.role}
               gender={member.gender}
-              onDelete={() => deleteMember(member.id)}
+              onDelete={() => deleteMember(member.name, fetchMembers)}
             />
           </div>
         ))}
@@ -176,8 +112,8 @@ export const AdminMemberList: FC = () => {
             <option value='female'>Perempuan</option>
           </select>
           <button
-            onClick={addMember}
-            disabled={isLoading}
+            onClick={() => addMember(newMember)}
+            disabled={isLoading || isfetching}
             className='flex items-center justify-center gap-2 px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
           >
             <UserPlus className='w-5 h-5' />
