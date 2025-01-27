@@ -1,16 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { supabase } from '../../../lib/supabase'
 import { LogIn, LogOut, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { useToast } from '../../../hooks/useToast'
+import { useLogout } from '../../../hooks/adminPages/useLogout'
 
 export const Login_out_Button = () => {
-  const [showToast, setShowToast] = useState(false)
-  const [toastMessage, setToastMessage] = useState('')
-  const [toastType, setToastType] = useState<'success' | 'error'>('success')
-
   const location = useLocation()
   const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false)
+  const { showToast, toastMessage, toastType, show, hide } = useToast() // Gunakan hook Toast
+  const { isLoading, handleLogout } = useLogout() // Gunakan hook Logout
 
   // Hide on login page
   if (location.pathname === '/login') {
@@ -19,28 +16,18 @@ export const Login_out_Button = () => {
 
   const isDashboard = location.pathname.startsWith('/dashboard')
 
-  const handleLogout = async () => {
+  const handleClick = async () => {
     try {
-      setIsLoading(true)
-      await supabase.auth.signOut({
-        scope: 'global',
-      })
-      navigate('/login')
+      if (isDashboard) {
+        await handleLogout()
+      } else {
+        navigate('/login')
+      }
     } catch (error) {
-      console.error('Gagal logout:', error)
-      setToastMessage('Gagal logout. Silakan coba lagi.')
-      setToastType('error')
-      setShowToast(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleClick = () => {
-    if (isDashboard) {
-      handleLogout()
-    } else {
-      navigate('/login')
+      if (error instanceof Error) {
+        show(error!.message, 'error') // Tampilkan toast dengan pesan error
+      }
+      throw error
     }
   }
 
@@ -55,13 +42,7 @@ export const Login_out_Button = () => {
         font-medium text-sm
         transform transition-all duration-200
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
-        ${
-          isLoading
-            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            : isDashboard
-              ? 'bg-red-50 text-red-600 hover:bg-red-100'
-              : 'bg-white text-green-700 hover:bg-green-50'
-        }
+        ${isLoading ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : isDashboard ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-white text-green-700 hover:bg-green-50'}
         before:absolute before:inset-0 before:rounded-full before:bg-white/0
         before:transition-all before:duration-200
         hover:before:bg-white/10
@@ -87,11 +68,7 @@ export const Login_out_Button = () => {
       {/* Hover effect overlay */}
       <span className='absolute inset-0 rounded-full bg-white/0 transition-all duration-200 group-hover:bg-black/5' />
       {showToast && (
-        <Toast
-          message={toastMessage}
-          type={toastType}
-          onClose={() => setShowToast(false)}
-        />
+        <Toast message={toastMessage} type={toastType} onClose={hide} />
       )}
     </button>
   )
