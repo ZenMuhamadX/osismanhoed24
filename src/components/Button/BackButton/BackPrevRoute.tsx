@@ -1,11 +1,11 @@
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-export const BackToDashboardButton = () => {
+export const BackPrevRoute = () => {
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    navigate('/dashboard')
+    navigate(-1)
   }
 
   return (
