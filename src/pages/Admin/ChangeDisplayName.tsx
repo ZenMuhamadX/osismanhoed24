@@ -1,8 +1,8 @@
 import React from 'react'
 import { UserCheck, AppWindow, Loader2 } from 'lucide-react'
-import { BackToDashboardButton } from '../../components/Button/BackButton/backToDashboard'
 import { useChangeDisplayName } from '../../hooks/adminPages/useChangeDisplayName'
 import { checkSession } from '../../lib/checkSession'
+import { BackPrevRoute } from '../../components/Button/BackButton/BackPrevRoute'
 
 export const ChangeDisplayName: React.FC = () => {
   checkSession()
@@ -116,7 +116,7 @@ export const ChangeDisplayName: React.FC = () => {
 
         {/* Back Button */}
         <div className='flex justify-center items-center mt-4'>
-          <BackToDashboardButton />
+          <BackPrevRoute />
         </div>
       </div>
     </div>
