@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BackButton } from '../components/Button/BackButton/BackButton'
-import { Card } from '../components/Card'
+import { CardMember } from '../components/CardMember'
 import { Footer } from '../components/Footer'
 import { supabase } from '../lib/supabase'
 import { Member } from '../components/Admin/AdminMemberList'
@@ -39,7 +39,7 @@ export const Members = () => {
       <div className='container mx-auto px-4 py-8'>
         <div className='grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6'>
           {members.map((member, index) => (
-            <Card
+            <CardMember
               motto={member.motto}
               name={member.name}
               gender={member.gender}
