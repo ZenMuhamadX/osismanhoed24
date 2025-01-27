@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router-dom'
 export const BackToDashboardButton = () => {
   const navigate = useNavigate()
 
+  const handleNavigate = () => {
+    navigate('/dashboard')
+  }
+
   return (
     <button
-      onClick={() => navigate('/dashboard')}
+      onClick={handleNavigate}
       className='flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-green-700 transition-all duration-200'
     >
       <ArrowLeft size={20} className='w-5 h-5' />
