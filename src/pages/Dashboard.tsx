@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import {
   Users,
@@ -143,6 +144,7 @@ export const Dashboard: React.FC = () => {
   const isExactPath = location.pathname === '/dashboard'
 
   return (
+
     <div className='min-h-screen bg-gradient-to-r from-green-700 to-green-500'>
       <AdminHeader role={user.user_metadata.display_name} />
 

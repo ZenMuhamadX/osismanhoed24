@@ -12,6 +12,7 @@ import { Dashboard } from './pages/Dashboard'
 import { AdminMemberList } from './components/Admin/AdminMemberList'
 import { AdminProgramList } from './components/Admin/AdminProgramList'
 import { AdminSuggestionList } from './components/Admin/AdminSuggestionList'
+
 import { AdminAccountManage } from './components/Admin/AdminAccountManage'
 import { ChangePassword } from './components/Admin/pages/ChangePassword'
 import { ChangeDisplayName } from './components/Admin/pages/ChangeDisplayName'
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/suggestions',
         element: <AdminSuggestionList />,
+
       },
       {
         path: '/dashboard/account',
